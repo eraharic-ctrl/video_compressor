@@ -18,12 +18,12 @@ jobs:
 
       - name: Download Original Video
         run: |
-          # video download
+          # Download video from Drive or other link
           curl -L "${{ github.event.inputs.video_url }}" -o original_video.mp4
 
       - name: Compress Video
         run: |
-          # High quality but small size (CRF 28)
+          # Compressing to DOT CRF 28
           ffmpeg -i original_video.mp4 -vcodec libx264 -crf 28 -preset faster -acodec aac output.mp4
 
       - name: Configure R2 & Upload
@@ -38,9 +38,9 @@ jobs:
           endpoint = ${{ secrets.R2_ENDPOINT }}
           EOF
           
-          # Bucket 'vyb-storage' This video will be saved.
-          rclone copy output.mp4 r2:vyb-storage/ --ams-file-name=compressed_${{ github.event.inputs.file_name }}
+          # Upload the video to your bucket 'vyb-storage' and name it correctly
+          rclone copyto output.mp4 r2:vyb-storage/compressed_${{ github.event.inputs.file_name }}
           
       - name: Cleanup
-        if: always() # Whether the operation is successful or not, the file will be deleted
+        if: always()
         run: rm -f original_video.mp4 output.mp4
