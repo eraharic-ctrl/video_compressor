@@ -24,7 +24,7 @@ jobs:
       - name: Compress Video
         run: |
           # Compressing to DOT CRF 28
-          ffmpeg -i original_video.mp4 -vcodec libx264 -crf 28 -preset faster -acodec aac output.mp4
+          ffmpeg -i original_video.mp4 -vcodec libx264 -crf 36 -preset faster -acodec aac output.mp4
 
       - name: Configure R2 & Upload
         run: |
